@@ -1,5 +1,7 @@
 <script setup>
 import { ref } from "vue";
+import confetti from "canvas-confetti";
+import Swal from "sweetalert2";
 
 const items = ref([]);
 
@@ -8,11 +10,17 @@ const activeItemId = ref(null);
 const selectedItemId = ref(null);
 
 const addItem = () => {
-  items.value.push({ id: items.value.length + 1, data: userInput.value });
-  userInput.value = "";
+  if (userInput.value.length > 3) {
+    items.value.push({
+      id: Math.floor(Math.random() * 1000000),
+      data: userInput.value,
+    });
+    userInput.value = "";
+  }
 };
 
 const clearItems = () => {
+  selectedItemId.value = null;
   items.value = [];
 };
 
@@ -22,6 +30,8 @@ const delItem = (itemId) => {
 
 const shuffle = () => {
   if (items.value.length >= 2) {
+    selectedItemId.value = null;
+
     let counter = 100;
     items.value.forEach((item) => {
       setTimeout(() => {
@@ -34,8 +44,61 @@ const shuffle = () => {
     counter += 100;
 
     setTimeout(() => {
-      alert("game over");
-      selectedItemId.value = null;
+      selectedItemId.value = items.value[items.value.length - 1].id;
+    }, counter);
+
+    counter += 100;
+
+    setTimeout(() => {
+      confetti.reset();
+
+      confetti({
+        particleCount: 300,
+        startVelocity: 30,
+        spread: 360,
+        origin: {
+          x: Math.random(),
+          // since they fall down, start a bit higher than random
+          y: Math.random() - 0.2,
+        },
+      });
+      confetti({
+        particleCount: 300,
+        startVelocity: 30,
+        spread: 360,
+        origin: {
+          x: Math.random(),
+          // since they fall down, start a bit higher than random
+          y: Math.random() - 0.2,
+        },
+      });
+      // confetti({
+      //   particleCount: 300,
+      //   angle: 60,
+      //   spread: 180,
+      //   origin: { x: 0 },
+      // });
+      // // and launch a few from the right edge
+      // confetti({
+      //   particleCount: 300,
+      //   angle: 60,
+      //   spread: 180,
+      //   origin: { x: 1 },
+      // });
+    }, counter);
+
+    counter += 100;
+
+    setTimeout(() => {
+      Swal.fire({
+        title: "Congratulation",
+        text: items.value.filter((item) => item.id == selectedItemId.value)[0]
+          .data,
+        imageUrl: "https://lotterystring.com/assets/img/win_badge.png",
+        imageWidth: 150,
+        imageHeight: 150,
+        imageAlt: "Custom image",
+      });
     }, counter);
   }
 };
@@ -162,8 +225,5 @@ const shuffle = () => {
 
 .item-text {
   opacity: 100%;
-}
-
-.item-parent:hover .item-text {
 }
 </style>
