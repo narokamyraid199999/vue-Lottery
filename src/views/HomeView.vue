@@ -6,7 +6,7 @@ const items = ref([]);
 let userInput = ref("");
 
 const addItem = () => {
-  items.value.push(userInput.value);
+  items.value.push({ id: items.value.length + 1, data: userInput.value });
   userInput.value = "";
 };
 
@@ -16,7 +16,7 @@ const clearItems = () => {
 </script>
 
 <template>
-  <div class="app bg-[#E7F0D3] min-h-screen max-h-screen">
+  <div class="app animated-background bg-[#E7F0D3] min-h-screen max-h-screen">
     <div class="container mx-auto px-[10%]">
       <div class="flex flex-col items-center justify-center pt-16">
         <!-- <span class="material-icons">keyboard_double_arrow_right</span> -->
@@ -74,7 +74,7 @@ const clearItems = () => {
           v-for="item in items"
           class="bg-white rounded-3xl shadow-sm flex justify-center items-center font-bold capitalize text-slate-500 border text-lg border-gray-400 px-4 py-1"
         >
-          <span>{{ item }}</span>
+          <span>{{ item.data }}</span>
         </p>
       </div>
     </div>
@@ -92,5 +92,23 @@ const clearItems = () => {
 .flex-item {
   padding: 10px;
   flex: 0 1 30%; /* to all flex-items */
+}
+
+.animated-background {
+  background: linear-gradient(to right, #fbf2db, #eff7de, #fbf2db);
+  background-size: 400% 400%;
+  animation: animate-background 10s infinite ease-in-out;
+}
+
+@keyframes animate-background {
+  0% {
+    background-position: 0 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
 }
 </style>
