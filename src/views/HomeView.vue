@@ -8,6 +8,9 @@ const items = ref([]);
 let userInput = ref("");
 const activeItemId = ref(null);
 const selectedItemId = ref(null);
+const file = ref(null);
+const content = ref(null);
+const doc = ref(null);
 
 const addItem = () => {
   if (userInput.value.length > 3) {
@@ -91,6 +94,9 @@ const shuffle = () => {
 
     setTimeout(() => {
       Swal.fire({
+        showConfirmButton: false,
+        showDenyButton: true,
+        denyButtonText: "Close",
         title: "Congratulation",
         text: items.value.filter((item) => item.id == selectedItemId.value)[0]
           .data,
@@ -102,10 +108,42 @@ const shuffle = () => {
     }, counter);
   }
 };
+
+const readFile = () => {
+  const file = doc.value.files[0];
+  if (file && file.name.includes(".txt")) {
+    const reader = new FileReader();
+    reader.onload = (res) => {
+      content.value = res.target.result.split("\n").map((line) => {
+        line = line.replace("\r", "");
+        return line != null && line != "" ? line : null;
+      });
+
+      content.value.forEach((item) => {
+        item != null
+          ? items.value.push({
+              id: Math.floor(Math.random() * 1000000),
+              data: item,
+            })
+          : undefined;
+      });
+    };
+    reader.onerror = (err) => {
+      message.value = "Error reading the file";
+      console.log(err);
+    };
+    reader.readAsText(file);
+  } else {
+    message.value = "Please upload a valid .txt file.";
+    content.value = [];
+  }
+};
 </script>
 
 <template>
-  <div class="app animated-background bg-[#E7F0D3] min-h-screen max-h-screen">
+  <div
+    class="app animated-background bg-[#E7F0D3] min-h-screen max-h-screen overflow-auto"
+  >
     <div class="container mx-auto px-[10%]">
       <div class="flex flex-col items-center justify-center pt-16">
         <!-- <span class="material-icons">keyboard_double_arrow_right</span> -->
@@ -155,39 +193,46 @@ const shuffle = () => {
           >
             <span class="material-icons mr-1">sync</span>Shuffle Items
           </button>
+          <div>
+            <input type="file" ref="doc" @change="readFile" />
+          </div>
         </div>
       </div>
 
       <!-- items -->
-      <div
-        class="flex flex-auto item-parent justify-center mt-8 gap-3 flex-wrap px-[22%]"
-      >
+      <div class="overflow-auto mt-10 max-h-[26rem] scrool-panel">
         <div
-          @mouseover="activeItemId = item.id"
-          @mouseleave="activeItemId = null"
-          class="relative"
-          v-for="item in items"
+          class="flex flex-auto item-parent justify-center mt-8 gap-3 max-h-[30rem] flex-wrap px-[15%]"
         >
-          <button
-            v-if="activeItemId == item.id"
-            @click="delItem(item.id)"
-            class="bg-red-500 absolute top-1 right-1 px-1 py-1 flex items-center justify-center rounded-full text-gray-100"
+          <div
+            @mouseover="activeItemId = item.id"
+            @mouseleave="activeItemId = null"
+            class="relative"
+            v-for="item in items"
           >
-            <span class="material-icons"> close </span>
-          </button>
-          <p
-            :class="{
-              ' rounded-3xl hover:shadow-md transition-all duration-200 shadow-sm flex justify-center items-center font-bold capitalize  border text-lg border-gray-400 px-4 py-1': true,
-              'bg-white text-slate-500':
-                selectedItemId == null || selectedItemId != item.id,
-              'bg-red-500 text-white':
-                selectedItemId != null && selectedItemId == item.id,
-            }"
-          >
-            <span class="item-text">{{ item.data }}</span>
-          </p>
+            <button
+              v-if="activeItemId == item.id"
+              @click="delItem(item.id)"
+              class="bg-red-500 absolute top-1 right-1 px-1 py-1 flex items-center justify-center rounded-full text-gray-100"
+            >
+              <span class="material-icons"> close </span>
+            </button>
+            <p
+              :class="{
+                ' rounded-3xl hover:shadow-md transition-all duration-200 shadow-sm flex justify-center items-center font-bold capitalize  border text-lg border-gray-400 px-4 py-1': true,
+                'bg-white text-slate-500':
+                  selectedItemId == null || selectedItemId != item.id,
+                'bg-red-500 text-white':
+                  selectedItemId != null && selectedItemId == item.id,
+              }"
+            >
+              <span class="item-text">{{ item.data }}</span>
+            </p>
+          </div>
         </div>
       </div>
+
+      <!-- <div>{{ content }}</div> -->
     </div>
   </div>
 </template>
@@ -225,5 +270,20 @@ const shuffle = () => {
 
 .item-text {
   opacity: 100%;
+}
+
+.scrool-panel::-webkit-scrollbar {
+  width: 5px;
+  height: 3px;
+}
+
+/* Track */
+.scrool-panel::-webkit-scrollbar-track {
+  background: #e2e2e3;
+}
+
+/* Handle */
+.scrool-panel::-webkit-scrollbar-thumb {
+  background: #cd3535;
 }
 </style>
