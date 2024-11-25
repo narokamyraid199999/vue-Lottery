@@ -30,6 +30,13 @@ const shuffle = () => {
       }, counter);
       counter += 100;
     });
+
+    counter += 100;
+
+    setTimeout(() => {
+      alert("game over");
+      selectedItemId.value = null;
+    }, counter);
   }
 };
 </script>
