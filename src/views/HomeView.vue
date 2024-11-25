@@ -5,6 +5,7 @@ const items = ref([]);
 
 let userInput = ref("");
 const activeItemId = ref(null);
+const selectedItemId = ref(null);
 
 const addItem = () => {
   items.value.push({ id: items.value.length + 1, data: userInput.value });
@@ -17,6 +18,19 @@ const clearItems = () => {
 
 const delItem = (itemId) => {
   items.value = items.value.filter((item) => item.id != itemId);
+};
+
+const shuffle = () => {
+  if (items.value.length >= 2) {
+    let counter = 100;
+    items.value.forEach((item) => {
+      setTimeout(() => {
+        selectedItemId.value =
+          items.value[Math.floor(Math.random() * items.value.length)].id;
+      }, counter);
+      counter += 100;
+    });
+  }
 };
 </script>
 
@@ -66,6 +80,7 @@ const delItem = (itemId) => {
             />
           </div>
           <button
+            @click="shuffle"
             class="bg-[#262D5B] text-lg px-5 py-2 flex items-center justify-center rounded-full text-gray-100"
           >
             <span class="material-icons mr-1">sync</span>Shuffle Items
@@ -91,7 +106,13 @@ const delItem = (itemId) => {
             <span class="material-icons"> close </span>
           </button>
           <p
-            class="bg-white rounded-3xl hover:shadow-md transition-all duration-200 shadow-sm flex justify-center items-center font-bold capitalize text-slate-500 border text-lg border-gray-400 px-4 py-1"
+            :class="{
+              ' rounded-3xl hover:shadow-md transition-all duration-200 shadow-sm flex justify-center items-center font-bold capitalize  border text-lg border-gray-400 px-4 py-1': true,
+              'bg-white text-slate-500':
+                selectedItemId == null || selectedItemId != item.id,
+              'bg-red-500 text-white':
+                selectedItemId != null && selectedItemId == item.id,
+            }"
           >
             <span class="item-text">{{ item.data }}</span>
           </p>
