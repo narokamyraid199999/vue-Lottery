@@ -4,6 +4,7 @@ import { ref } from "vue";
 const items = ref([]);
 
 let userInput = ref("");
+const activeItemId = ref(null);
 
 const addItem = () => {
   items.value.push({ id: items.value.length + 1, data: userInput.value });
@@ -12,6 +13,10 @@ const addItem = () => {
 
 const clearItems = () => {
   items.value = [];
+};
+
+const delItem = (itemId) => {
+  items.value = items.value.filter((item) => item.id != itemId);
 };
 </script>
 
@@ -69,13 +74,28 @@ const clearItems = () => {
       </div>
 
       <!-- items -->
-      <div class="flex flex-auto justify-center mt-8 gap-3 flex-wrap px-[22%]">
-        <p
+      <div
+        class="flex flex-auto item-parent justify-center mt-8 gap-3 flex-wrap px-[22%]"
+      >
+        <div
+          @mouseover="activeItemId = item.id"
+          @mouseleave="activeItemId = null"
+          class="relative"
           v-for="item in items"
-          class="bg-white rounded-3xl shadow-sm flex justify-center items-center font-bold capitalize text-slate-500 border text-lg border-gray-400 px-4 py-1"
         >
-          <span>{{ item.data }}</span>
-        </p>
+          <button
+            v-if="activeItemId == item.id"
+            @click="delItem(item.id)"
+            class="bg-red-500 absolute top-1 right-1 px-1 py-1 flex items-center justify-center rounded-full text-gray-100"
+          >
+            <span class="material-icons"> close </span>
+          </button>
+          <p
+            class="bg-white rounded-3xl hover:shadow-md transition-all duration-200 shadow-sm flex justify-center items-center font-bold capitalize text-slate-500 border text-lg border-gray-400 px-4 py-1"
+          >
+            <span class="item-text">{{ item.data }}</span>
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -110,5 +130,12 @@ const clearItems = () => {
   100% {
     background-position: 0 50%;
   }
+}
+
+.item-text {
+  opacity: 100%;
+}
+
+.item-parent:hover .item-text {
 }
 </style>
