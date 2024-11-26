@@ -55,39 +55,30 @@ const shuffle = () => {
     setTimeout(() => {
       confetti.reset();
 
-      confetti({
-        particleCount: 300,
-        startVelocity: 30,
-        spread: 360,
-        origin: {
-          x: Math.random(),
-          // since they fall down, start a bit higher than random
-          y: Math.random() - 0.2,
-        },
-      });
-      confetti({
-        particleCount: 300,
-        startVelocity: 30,
-        spread: 360,
-        origin: {
-          x: Math.random(),
-          // since they fall down, start a bit higher than random
-          y: Math.random() - 0.2,
-        },
-      });
       // confetti({
       //   particleCount: 300,
-      //   angle: 60,
-      //   spread: 180,
-      //   origin: { x: 0 },
+      //   startVelocity: 30,
+      //   spread: 360,
+      //   origin: {
+      //     x: Math.random(),
+      //     // since they fall down, start a bit higher than random
+      //     y: Math.random() - 0.2,
+      //   },
       // });
-      // // and launch a few from the right edge
       // confetti({
       //   particleCount: 300,
-      //   angle: 60,
-      //   spread: 180,
-      //   origin: { x: 1 },
+      //   startVelocity: 30,
+      //   spread: 360,
+      //   origin: {
+      //     x: Math.random(),
+      //     // since they fall down, start a bit higher than random
+      //     y: Math.random() - 0.2,
+      //   },
       // });
+      confetti({
+        particleCount: 2000,
+        spread: 360,
+      });
     }, counter);
 
     counter += 100;
@@ -152,16 +143,16 @@ const readFile = () => {
           src="https://cdn-icons-png.freepik.com/512/2038/2038515.png"
           alt=""
         />
-        <p class="text-4xl font-bold mt-4 text-[#262D5B]">
-          LotteryString - Random Name Picker
+        <p class="text-4xl font-bold my-4 text-[#262D5B] capitalize">
+          winner winner chicken on dinner
         </p>
-        <p class="text-center text-xl my-4 leading-tight text-[#3E444D]">
+        <!-- <p class="text-center text-xl my-4 leading-tight text-[#3E444D]">
           An online lottery tool that let you add items or text by entering them
           in the input box, once<br />
           you're added at least two items, simply press the shuffle button, and
           the app will randomly<br />
           select a winner
-        </p>
+        </p> -->
         <div class="mt-2 flex items-center gap-x-3">
           <!-- <button>+</button> -->
           <button
@@ -258,7 +249,7 @@ const readFile = () => {
 }
 
 .animated-background {
-  background: linear-gradient(to right, #fbf2db, #eff7de, #fbf2db);
+  background: linear-gradient(to right, #fbf2db, #eff7de, #ebc973);
   background-size: 400% 400%;
   animation: animate-background 10s infinite ease-in-out;
 }
