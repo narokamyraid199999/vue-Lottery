@@ -194,15 +194,22 @@ const readFile = () => {
             <span class="material-icons mr-1">sync</span>Shuffle Items
           </button>
           <div>
+            <!-- <div class="upload-btn-wrapper">
+              <button class="btn flex items-center gap-x-2">
+                <span class="material-icons">cloud_upload</span>
+                Upload file
+              </button>
+              <input type="file" ref="doc" @change="readFile" />
+            </div> -->
             <input type="file" ref="doc" @change="readFile" />
           </div>
         </div>
       </div>
 
       <!-- items -->
-      <div class="overflow-auto mt-10 max-h-[26rem] scrool-panel">
+      <div class="overflow-auto mt-8 max-h-[26rem] scrool-panel">
         <div
-          class="flex flex-auto item-parent justify-center mt-8 gap-3 max-h-[30rem] flex-wrap px-[15%]"
+          class="flex flex-auto item-parent justify-center gap-3 max-h-[30rem] flex-wrap px-[15%]"
         >
           <div
             @mouseover="activeItemId = item.id"
@@ -273,7 +280,7 @@ const readFile = () => {
 }
 
 .scrool-panel::-webkit-scrollbar {
-  width: 5px;
+  width: 3px;
   height: 3px;
 }
 
@@ -285,5 +292,15 @@ const readFile = () => {
 /* Handle */
 .scrool-panel::-webkit-scrollbar-thumb {
   background: #cd3535;
+}
+input[type="file"]::file-selector-button {
+  margin-right: 20px;
+  border: none;
+  background: #262d5b;
+  padding: 10px 20px;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 5rem;
 }
 </style>
